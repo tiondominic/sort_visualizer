@@ -1,47 +1,25 @@
 local normalize = require "normalize"
+local sorting = require "sorting_algos"
+local delay = 0
+local speed = 0.01
 
 local bubbleSortBlocks
 local sortThread
-local delay = 0
-local speed = 0.05
-
-bubbleSortBlocks = function()
-    local blocks = normalize.blocks
-    local n = #blocks
-
-    for i = 1, n - 1 do
-        for j = 1, n - i do
-            local a = blocks[j]
-            local b = blocks[j + 1]
-
-            a:selected()
-            b:selected()
-
-            coroutine.yield(speed)
-
-            if a.value > b.value then
-                a.x, b.x = b.x, a.x
-                blocks[j], blocks[j + 1] = b, a
-
-                coroutine.yield(speed)
-            end
-
-            a:deselected()
-            b:deselected()
-        end
-
-        blocks[n - i + 1]:sorted()
-        coroutine.yield(speed)
-    end
-
-    blocks[1]:sorted()
-end
 
 function love.load()
-    local nums = {99,99,99,99,7,91,18,63,5,77,29,84,13,56,99,34,71,2,88,47,20,65,11}
+    love.math.getRandomSeed()
+    local n = 100
+    local nums = {}
+    for i=0, n, 1 do
+        local a = love.math.random(0, 1000)
+        table.insert(nums, a)
+    end
+
     normalize:init(nums)
 
-    sortThread = coroutine.create(bubbleSortBlocks)
+    sortThread = coroutine.create(function()
+        sorting.mergeSort(normalize.blocks, speed)
+    end)
 end
 
 function love.update(dt)

@@ -27,7 +27,7 @@ function normalize:init(values)
 
         end
         local a = block.new()   
-        a:init(v, width, height+20, (i - 1) * width, h)
+        a:init(v, width-2, height+20, (i - 1) * width+1, h)
         table.insert(self.blocks, a)
     end
 end
