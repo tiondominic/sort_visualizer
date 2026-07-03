@@ -98,6 +98,11 @@ function algos.mergeSort(blocks, speed)
 
     local function merge(left, mid, right)
         local temp = {}
+        local positions = {}
+
+        for k = left, right do
+            positions[k - left + 1] = blocks[k].x
+        end
 
         local i = left
         local j = mid + 1
@@ -110,7 +115,6 @@ function algos.mergeSort(blocks, speed)
                 table.insert(temp, blocks[j])
                 j = j + 1
             end
-            -- blocks[i].x, blocks[j].x = blocks[j].x, blocks[i].x
         end
 
         while i <= mid do
@@ -125,11 +129,13 @@ function algos.mergeSort(blocks, speed)
 
         for k = left, right do
             blocks[k] = temp[k - left + 1]
-
+            blocks[k].x = positions[k - left + 1]
+            
             blocks[k]:selected()
             coroutine.yield(speed)
             blocks[k]:deselected()
         end
+        
     end
 
     local function sort(left, right)
