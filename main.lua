@@ -3,7 +3,7 @@ local normalize = require "normalize"
 local bubbleSortBlocks
 local sortThread
 local delay = 0
-local speed = 0.1
+local speed = 0.05
 
 bubbleSortBlocks = function()
     local blocks = normalize.blocks
@@ -31,7 +31,7 @@ bubbleSortBlocks = function()
         end
 
         blocks[n - i + 1]:sorted()
-        coroutine.yield(0.2)
+        coroutine.yield(speed)
     end
 
     blocks[1]:sorted()
