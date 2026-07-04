@@ -1,24 +1,44 @@
 local normalize = require "normalize"
 local sorting = require "sorting_algos"
 local delay = 0
-local speed = 0.01
+local speed = 0.0
 
 local bubbleSortBlocks
 local sortThread
 
+local function shuffleTable(t)
+    local n = #t
+    local positions = {}
+
+    for k = 1, n do
+        positions[k] = t[k].x
+    end
+
+    for i = n, 2, -1 do
+        local j = love.math.random(i)
+        t[i], t[j] = t[j], t[i]
+    end
+
+    for k = 1, n do
+        t[k].x = positions[k]
+    end
+end
+
 function love.load()
-    love.math.getRandomSeed()
-    local n = 100
+    love.math.setRandomSeed(os.time())
+    local n = 2000
+
     local nums = {}
-    for i=0, n, 1 do
-        local a = love.math.random(0, 1000)
-        table.insert(nums, a)
+    for i=1, n, 1 do
+        table.insert(nums, i)
     end
 
     normalize:init(nums)
+    shuffleTable(normalize.blocks)
+    
 
     sortThread = coroutine.create(function()
-        sorting.mergeSort(normalize.blocks, speed)
+        sorting.bucketSort(normalize.blocks, speed)
     end)
 end
 

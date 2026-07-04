@@ -6,13 +6,14 @@ function block.new()
     return instance
 end
 
-function block:init(value, width, height, x, y)
+function block:init(value, width, height, x, y, color)
     self.value = value
     self.width = width
     self.height = height
     self.x = x
     self.y = y
-    self.color = {0.5,0.5,0.5}
+    self.color = color or {0.5,0.5,0.5}
+    self.prev_color = nil
 end
 
 function block:update(dt)
@@ -26,11 +27,12 @@ function block:draw()
 end
 
 function block:selected()
+    self.prev_color = self.color
     self.color = {1,0,0}
 end 
 
 function block:deselected()
-    self.color = {0.5,0.5,0.5}
+    self.color = self.prev_color
 end
 
 function block:sorted()
